@@ -10,6 +10,7 @@ WALL_TILE = 3
 
 WORKED_TILE_IMAGE = pg.transform.scale(pg.image.load('assets/images/workedTile.png'), (int(560/35), int(352/22)))
 FARM_TILE_IMAGE = pg.transform.scale(pg.image.load('assets/images/farmTile.png'), (int(560/35), int(352/22)))
+WALL_TILE_IMAGE = pg.transform.scale(pg.image.load('assets/images/boulder.png'), (int(560/35), int(352/22)))
 
 class map():
     def __init__(self, mapIndex, winWidth, winHeight):
@@ -37,6 +38,10 @@ class map():
                     x_coord = self.tileWidth * x
                     y_coord = self.tileHeight * y
                     window.blit(FARM_TILE_IMAGE, (x_coord, y_coord))
+                if self.grid[x][y] == 3:
+                    x_coord = self.tileWidth * x
+                    y_coord = self.tileHeight * y
+                    window.blit(WALL_TILE_IMAGE, (x_coord, y_coord))
 
     def interact_with_tile(self, playerX, playerY, winHeight, winWidth):
         gridX = int((playerX / winWidth ) * self.width)
@@ -47,7 +52,7 @@ class map():
         if gridY == 22:
             gridY -=1
 
-        if self.grid[gridX][gridY] != 0:
+        if self.grid[gridX][gridY] == 1:
             self.grid[gridX][gridY] = 2
 
 
@@ -56,6 +61,11 @@ farmGrid = np.ones((35, 22))
 for x in range(17, 35):
     for y in range(0, 9):
         farmGrid[x][y] = 0
+    
+farmGrid[0,:] = 3
+farmGrid[:,0] = 3
+farmGrid[34,:] = 3
+farmGrid[:,21] = 3
 
 print(farmGrid.transpose())
 print(farmGrid[34][0])
