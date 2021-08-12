@@ -10,4 +10,4 @@ class player():
         self.vel = 3
     
     def draw(self, window):
-        window.blit(self.image, (self.x - (self.width / 2), self.y - (7/8) * self.height))
+        window.blit(self.image, (self.x - (self.width / 2), self.y - self.height))

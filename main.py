@@ -32,14 +32,18 @@ class Game():
 
         keys = pg.key.get_pressed()  # This will give us a dictonary where each key has a value of 1 or 0. Where 1 is pressed and 0 is not pressed.
 
-        if keys[pg.K_LEFT] and self.player.x > 0: # We can check if a key is pressed like this
-            self.player.x -= self.player.vel
-        if keys[pg.K_RIGHT] and self.player.x < self.winWidth:
-            self.player.x += self.player.vel
-        if keys[pg.K_UP] and self.player.y > 0: # We can check if a key is pressed like this
-            self.player.y -= self.player.vel
-        if keys[pg.K_DOWN] and self.player.y < self.winHeight:
-            self.player.y += self.player.vel
+        # to tidy up if statements
+        x, y, vel = self.player.x, self.player.y, self.player.vel
+
+
+        if keys[pg.K_LEFT] and x > 0 and self.map.get_tile_type(x - vel, y) != 3: # We can check if a key is pressed like this
+            self.player.x -= vel
+        if keys[pg.K_RIGHT] and x < self.winWidth and self.map.get_tile_type(x + vel, y) != 3:
+            self.player.x += vel
+        if keys[pg.K_UP] and y > 0 and self.map.get_tile_type(x, y - vel) != 3:
+            self.player.y -= vel
+        if keys[pg.K_DOWN] and y < self.winHeight and self.map.get_tile_type(x, y + 100) != 3:
+            self.player.y += vel
 
         if keys[pg.K_SPACE]:
             self.map.interact_with_tile(self.player.x, self.player.y, self.winHeight, self.winWidth)

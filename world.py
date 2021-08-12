@@ -23,6 +23,9 @@ class map():
         self.name = mapList[mapIndex]['name']
         self.tileWidth = winWidth / self.width
         self.tileHeight = winHeight / self.height
+        self.winHeight = winHeight
+        self.winWidth = winWidth
+
     
     def draw(self, window, winHeight, winWidth):
         window.blit(self.image, (0,0))
@@ -47,6 +50,8 @@ class map():
         gridX = int((playerX / winWidth ) * self.width)
         gridY = int((playerY / winHeight) * self.height)
 
+        print ("Youre on tile: ", gridX, gridY)
+        print ("it is of type: ", self.grid[gridX][gridY])
         if gridX == 35:
             gridX -= 1
         if gridY == 22:
@@ -54,6 +59,12 @@ class map():
 
         if self.grid[gridX][gridY] == 1:
             self.grid[gridX][gridY] = 2
+        
+    def get_tile_type(self, x, y):
+        gridX = int((x / self.winWidth ) * self.width)
+        gridY = int((y / self.winWidth) * self.height)
+
+        return self.grid[gridX][gridY]       
 
 
 farmGrid = np.ones((35, 22))
