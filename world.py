@@ -47,25 +47,38 @@ class map():
                     window.blit(WALL_TILE_IMAGE, (x_coord, y_coord))
 
     def interact_with_tile(self, playerX, playerY, winHeight, winWidth):
-        gridX = int((playerX / winWidth ) * self.width)
-        gridY = int((playerY / winHeight) * self.height)
-
-        print ("Youre on tile: ", gridX, gridY)
-        print ("it is of type: ", self.grid[gridX][gridY])
+        gridX, gridY = self.convert_coord_to_tile(playerX, playerY)
         if gridX == 35:
             gridX -= 1
         if gridY == 22:
             gridY -=1
+        # the bottom and right edges are actually part of the previous tile. 
+        # need to push it back so we dont get an index error
+        print ("Youre on tile: ", gridX, gridY)
+        print ("it is of type: ", self.grid[gridX][gridY])
+        
 
         if self.grid[gridX][gridY] == 1:
             self.grid[gridX][gridY] = 2
         
     def get_tile_type(self, x, y):
+        gridX, gridY = self.convert_coord_to_tile(x, y)
+
+        return self.grid[gridX][gridY] 
+
+    def convert_coord_to_tile(self, x, y):
         gridX = int((x / self.winWidth ) * self.width)
         gridY = int((y / self.winWidth) * self.height)
 
-        return self.grid[gridX][gridY]       
+        return gridX, gridY
 
+    # takes a sprite, checks whether its requested move is valid
+    # moves the sprite if it is valid
+    def move_sprite(self, sprite, x_change, y_change):
+        tile_type = self.get_tile_type(sprite.x + x_change, sprite.y + y_change)
+        # move sprite
+        if tile_type != 3:
+            sprite.move(x_change, y_change)
 
 farmGrid = np.ones((35, 22))
 
@@ -77,6 +90,9 @@ farmGrid[0,:] = 3
 farmGrid[:,0] = 3
 farmGrid[34,:] = 3
 farmGrid[:,21] = 3
+farmGrid[18:22,7] = 3
+farmGrid[25:27,7] = 3
+farmGrid[18:27,2:7] = 3 # house
 
 print(farmGrid.transpose())
 print(farmGrid[34][0])
